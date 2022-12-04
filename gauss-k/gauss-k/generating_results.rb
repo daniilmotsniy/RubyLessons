@@ -1,9 +1,9 @@
 require 'aws-sdk-s3'
 
-ACCESS_KEY_ID = "AKIAS276M2IT6SJROHHP"
-SECRET_ACCESS_KEY = "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"
-REGION_ID = "us-east-1"
-BUCKET_NAME = "cloudmotsnyi"
+ACCESS_KEY_ID = ENV['ACCESS_KEY_ID']
+SECRET_ACCESS_KEY = ENV['SECRET_ACCESS_KEY']
+REGION_ID = ENV['REGION_ID']
+BUCKET_NAME = ENV['BUCKET_NAME']
 
 
 def gauss_kuzmin_distribution(k)
@@ -11,11 +11,18 @@ def gauss_kuzmin_distribution(k)
   -Math.log((1 - (1 / ((1 + k) * (1 + k)).to_f)), 2)
 end
 
+puts('Gauss-Kuzmin distribution modeling. Developer`s email: daniilmotsnyi@gmail.com')
+
+puts('Enter left border of iterations (natural, >= 1)')
+left = gets.chomp.to_i
+
+puts('Enter right border of iterations (natural, >= left)')
+right = gets.chomp.to_i
+
 begin
   file = File.open('results.csv', 'w')
-  # file.write("k,value\n")
-  (0..20).each { |_|
-    k = rand(1...1000)
+  # file.write("k,p\n")
+  (left..right).each { |k|
     file.write("#{k},#{gauss_kuzmin_distribution k}\n")
   }
 rescue IOError => e
